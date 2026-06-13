@@ -62,7 +62,7 @@ const SectionThree = () => {
   };
 
   return (
-    <section className="relative w-full min-h-[700px] md:min-h-[850px] py-16 flex flex-col items-center overflow-hidden font-sans">
+    <section className="relative w-full min-h-[700px] md:min-h-[850px] py-16 flex flex-col items-center overflow-hidden font-jakarta">
       
       {/* --- RESPONSIVE BACKGROUND IMAGES --- */}
       <div className="absolute inset-0 -z-10 w-full h-full">
