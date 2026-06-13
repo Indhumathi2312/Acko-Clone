@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-// You may need to adjust this path based on your project structure
-import claimsVideo from '../../../assets/Claim_video.webm';
+// Ensure this path correctly points to your video file
+import claimsVideo from "../../../assets/Claim_video.webm";
 
 const testimonials = [
   {
@@ -10,71 +10,82 @@ const testimonials = [
     text: "I recently switched to ACKO Insurance and I'm thoroughly impressed! Their app is incredibly user-friendly, making it easy to purchase and manage policies. The claims process is also seamless and hassle-free.",
     name: "Sahil Roy",
     policy: "ACKO customer",
-    initial: "S"
+    initial: "S",
   },
   {
     id: 2,
     text: "Having claimed insurance with other providers in the past, I can confidently say that none of those experiences even come close to what ACKO delivered. The entire process was incredibly smooth and stress-free.",
     name: "Dheeraj Jha",
     policy: "ACKO car insurance",
-    initial: "D"
+    initial: "D",
   },
   {
     id: 3,
     text: "After my mom was diagnosed with cancer suddenly, the situation was overwhelming, but ACKO health insurance support team made it smooth and easy. Most of our hospital bills were covered, and the claims process was hassle-free.",
     name: "Pruthvi R",
     policy: "ACKO health insurance",
-    initial: "P"
-  }
+    initial: "P",
+  },
 ];
 
 const SectionTwo = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
+    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
   };
 
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white font-sans flex justify-center overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-white font-jakarta flex justify-center overflow-hidden"
+    >
       <div className="w-full max-w-[1240px]">
-        
         {/* --- TOP HEADER & STATS --- */}
-        <div className="mb-16 text-center">
-          <h2 className="text-3xl md:text-[36px] lg:text-[40px] font-extrabold text-[#222] mb-10 tracking-tight">
+        <div
+          className={`mb-10 lg:mb-16 text-center transition-all duration-700 ease-out transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        >
+          <h2 className="text-2xl md:text-[36px] lg:text-[40px] font-extrabold text-[#222] mb-8 lg:mb-10 tracking-tight">
             Your trust isn't assumed, its earned
           </h2>
-          
-          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
-            <div className="text-center">
-              <h3 className="text-4xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-2">7 mins</h3>
-              <p className="text-[14px] md:text-[15px] text-gray-600 font-medium">Fastest claim settlement</p>
-            </div>
-            
-            {/* Vertical Divider */}
-            <div className="hidden md:block w-px h-14 bg-gray-200"></div>
-            
-            <div className="text-center">
-              <h3 className="text-4xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-2">98.8%</h3>
-              <p className="text-[14px] md:text-[15px] text-gray-600 font-medium">Claims settled in 1 week</p>
-            </div>
 
-            {/* Vertical Divider */}
+          <div className="flex flex-row justify-center items-center gap-6 md:gap-16">
+            <div className="text-center group cursor-default">
+              <h3 className="text-2xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-1">7 mins</h3>
+              <p className="text-[12px] md:text-[15px] text-gray-600 font-medium">Fastest claim</p>
+            </div>
+            <div className="w-px h-10 md:h-14 bg-gray-200"></div>
+            <div className="text-center group cursor-default">
+              <h3 className="text-2xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-1">98.8%</h3>
+              <p className="text-[12px] md:text-[15px] text-gray-600 font-medium">Claims settled</p>
+            </div>
             <div className="hidden md:block w-px h-14 bg-gray-200"></div>
-            
-            <div className="text-center">
-              <h3 className="text-4xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-2">24x7</h3>
-              <p className="text-[14px] md:text-[15px] text-gray-600 font-medium">Instant claims support</p>
+            <div className="text-center group cursor-default">
+              <h3 className="text-2xl md:text-[46px] font-bold text-[#a855f7] tracking-tight mb-1">24x7</h3>
+              <p className="text-[12px] md:text-[15px] text-gray-600 font-medium">Instant support</p>
             </div>
           </div>
         </div>
@@ -82,102 +93,81 @@ const SectionTwo = () => {
         {/* --- MAIN CONTENT TWO COLUMNS --- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           
-          {/* LEFT COLUMN: Phone Video Mockup */}
-          <div className="bg-[#f5f5f7] rounded-[40px] pt-10 px-8 flex flex-col items-center overflow-hidden relative h-[500px] lg:h-[600px]">
-            <h3 className="text-[24px] lg:text-[28px] font-bold text-[#222] mb-8 z-10 text-center">
+          {/* LEFT COLUMN: Phone Video */}
+          <div
+            className={`bg-[#f5f5f7] rounded-[30px] lg:rounded-[40px] pt-8 lg:pt-10 px-4 lg:px-8 flex flex-col items-center overflow-hidden relative min-h-[400px] lg:h-[600px] transition-all duration-700 delay-300 ease-out transform ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
+          >
+            <h3 className="text-[20px] lg:text-[28px] font-bold text-[#222] mb-6 z-10 text-center">
               Claims shouldn't be hard
             </h3>
-            
-            {/* Custom Dynamic Island Phone Frame */}
-            <div className="relative w-full max-w-[300px] lg:max-w-[340px] h-[330px] md:h-[350px] lg:h-[400px] bg-white border-[12px] border-[#2A2B3D] border-b-0 rounded-t-[56px] flex-shrink-0 mt-auto shadow-2xl">
-              
-              {/* Dynamic Island Notch */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-[90px] h-[26px] bg-[#111] rounded-full z-20"></div>
-              
-              {/* Screen / Video */}
-              <div className="relative w-full h-full rounded-t-[42px] overflow-hidden bg-white">
-                <video 
-                  src={claimsVideo} 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="w-full h-full object-cover scale-[1.01]"
+
+            <div className="relative w-[240px] md:w-[300px] lg:w-[340px] h-[280px] md:h-[350px] lg:h-[400px] bg-white border-[8px] lg:border-[12px] border-[#2A2B3D] border-b-0 rounded-t-[40px] lg:rounded-t-[56px] flex-shrink-0 mt-auto shadow-2xl">
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[70px] lg:w-[90px] h-[20px] lg:h-[26px] bg-[#111] rounded-full z-20"></div>
+              <div className="relative w-full h-full rounded-t-[32px] lg:rounded-t-[42px] overflow-hidden bg-white">
+                <video
+                  src={claimsVideo}
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  playsInline={true}
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
           </div>
 
           {/* RIGHT COLUMN: Testimonial Carousel */}
-          <div className="bg-[#f5f5f7] rounded-[40px] p-8 md:p-12 flex flex-col items-center justify-between h-[500px] lg:h-[600px]">
-            
-            <div className="w-full flex flex-col items-center">
-              <h3 className="text-[24px] lg:text-[28px] font-bold text-[#222] mb-12 text-center">
-                Promises made. Promises kept.
-              </h3>
-              
-              <div className="flex items-center justify-between w-full gap-4">
-                
-                {/* Left Arrow */}
-                <button 
-                  onClick={handlePrev}
-                  className="w-10 h-10 flex-shrink-0 rounded-full bg-gray-200/70 flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-md transition-all"
-                  aria-label="Previous testimonial"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
+          <div
+            className={`bg-[#f5f5f7] rounded-[30px] lg:rounded-[40px] p-6 lg:p-12 flex flex-col items-center justify-between min-h-[400px] lg:h-[600px] transition-all duration-700 delay-500 ease-out transform ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
+          >
+            <h3 className="text-[20px] lg:text-[28px] font-bold text-[#222] mb-6 text-center">
+              Promises made. Promises kept.
+            </h3>
 
-                {/* Content Container */}
-                <div className="flex flex-col items-center max-w-sm px-2">
-                  
-                  {/* 5 Stars */}
-                  <div className="flex gap-1.5 mb-6">
+            <div className="flex items-center justify-between w-full gap-2">
+              <button
+                onClick={handlePrev}
+                className="w-8 h-8 lg:w-10 lg:h-10 flex-shrink-0 rounded-full bg-gray-200/70 flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-md transition-all"
+              >
+                <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+              </button>
+
+              <div className="flex flex-col items-center max-w-[280px] lg:max-w-sm px-2 overflow-hidden">
+                <div key={currentIndex} className="animate-in fade-in zoom-in-95 duration-500 flex flex-col items-center w-full">
+                  <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 fill-[#FFC107] text-[#FFC107]" />
+                      <Star key={i} className="w-5 h-5 fill-[#FFC107] text-[#FFC107]" />
                     ))}
                   </div>
-                  
-                  {/* Testimonial Text */}
-                  <div className="min-h-[140px] flex items-center justify-center w-full mb-8">
-                    <p className="text-center text-[14px] md:text-[15px] text-gray-700 leading-relaxed font-medium transition-opacity duration-300">
+                  <div className="h-[120px] lg:min-h-[140px] flex items-center justify-center w-full mb-6 text-center">
+                    <p className="text-[13px] md:text-[15px] text-gray-700 leading-relaxed font-medium">
                       {currentTestimonial.text}
                     </p>
                   </div>
-
-                  {/* Author Info */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-300/60 rounded-full flex items-center justify-center text-lg font-bold text-gray-700">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300/60 rounded-full flex items-center justify-center font-bold text-gray-700">
                       {currentTestimonial.initial}
                     </div>
                     <div className="text-left">
-                      <h4 className="text-[15px] font-bold text-[#222]">{currentTestimonial.name}</h4>
-                      <p className="text-[13px] text-gray-500">{currentTestimonial.policy}</p>
+                      <h4 className="text-[14px] font-bold text-[#222]">{currentTestimonial.name}</h4>
+                      <p className="text-[12px] text-gray-500">{currentTestimonial.policy}</p>
                     </div>
                   </div>
-
                 </div>
-
-                {/* Right Arrow */}
-                <button 
-                  onClick={handleNext}
-                  className="w-10 h-10 flex-shrink-0 rounded-full bg-gray-200/70 flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-md transition-all"
-                  aria-label="Next testimonial"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-
               </div>
-            </div>
 
-            {/* View More Button */}
-            <div className="mt-8">
-              <button className="bg-[#111] text-white px-8 py-3.5 rounded-[14px] font-semibold text-[15px] hover:bg-black transition-colors shadow-lg">
-                View more
+              <button
+                onClick={handleNext}
+                className="w-8 h-8 lg:w-10 lg:h-10 flex-shrink-0 rounded-full bg-gray-200/70 flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-md transition-all"
+              >
+                <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
               </button>
             </div>
 
+            <button className="mt-6 bg-[#111] text-white px-6 py-3 rounded-[14px] font-semibold text-[14px] lg:text-[15px] hover:bg-black transition-all">
+              View more
+            </button>
           </div>
-
         </div>
       </div>
     </section>

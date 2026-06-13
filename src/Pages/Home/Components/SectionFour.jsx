@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   FileText, 
   CreditCard, 
@@ -38,6 +38,27 @@ const features = [
 
 const SectionFour = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  // Trigger entry animations when scrolling into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Run once
+        }
+      },
+      { threshold: 0.15 } // Triggers when 15% of the section is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   // Auto-play the carousel
   useEffect(() => {
@@ -48,11 +69,14 @@ const SectionFour = () => {
   }, []);
 
   return (
-    <section className="w-full bg-[#f4f5f5] py-16 px-4 sm:px-6 lg:px-8 font-sans overflow-hidden min-h-screen flex items-center">
+    <section 
+      ref={sectionRef} 
+      className="w-full bg-white py-16 px-4 sm:px-6 lg:px-8 font-jakarta overflow-hidden min-h-screen flex items-center"
+    >
       <div className="max-w-[1280px] mx-auto w-full">
         
         {/* --- HEADER --- */}
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-700 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-3xl md:text-[38px] font-bold text-[#1a113d] mb-3">
             Explore FREE helpful services on our app
           </h2>
@@ -60,7 +84,7 @@ const SectionFour = () => {
             Even if you are not our customer
           </p>
           
-          <button className="inline-flex items-center gap-3 bg-[#111111] text-white px-6 py-3.5 rounded-[20px] font-semibold text-[15px] hover:bg-black transition-colors mb-6 shadow-md">
+          <button className="inline-flex items-center gap-3 bg-[#111111] text-white px-6 py-3.5 rounded-[20px] font-semibold text-[15px] hover:bg-black hover:scale-105 active:scale-95 transition-all mb-6 shadow-md hover:shadow-lg">
              <div className="flex -space-x-1">
                 <FaApple className="w-5 h-5 text-[#3b82f6] relative z-10 bg-white rounded-full p-0.5" />
                 <FaGooglePlay className="w-5 h-5 text-[#10b981] relative z-0 bg-white rounded-full p-0.5" />
@@ -81,12 +105,12 @@ const SectionFour = () => {
               </div>
             </div>
             <div className="flex items-center gap-6">
-              <div className="text-center">
-                <p className="text-[24px] font-black text-[#1a113d] leading-none mb-1">4.6</p>
+              <div className="text-center group cursor-default">
+                <p className="text-[24px] font-black text-[#1a113d] leading-none mb-1 group-hover:scale-110 transition-transform">4.6</p>
                 <p className="text-[11px] text-gray-500 font-medium">Play Store</p>
               </div>
-              <div className="text-center">
-                <p className="text-[24px] font-black text-[#1a113d] leading-none mb-1">4.8</p>
+              <div className="text-center group cursor-default">
+                <p className="text-[24px] font-black text-[#1a113d] leading-none mb-1 group-hover:scale-110 transition-transform">4.8</p>
                 <p className="text-[11px] text-gray-500 font-medium">App Store</p>
               </div>
             </div>
@@ -96,10 +120,10 @@ const SectionFour = () => {
         {/* --- THREE COLUMN LAYOUT --- */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 xl:gap-12 relative">
           
-          {/* LEFT: Vehicles Grid */}
-          <div className="w-full lg:w-[340px] xl:w-[380px] order-2 lg:order-1 relative mt-8 lg:mt-0 z-10">
-            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-[#dcfce7] opacity-60 pointer-events-none"></div>
+          {/* LEFT: Vehicles Grid (Slides in from Left) */}
+          <div className={`w-full lg:w-[340px] xl:w-[380px] order-2 lg:order-1 relative mt-8 lg:mt-0 z-10 transition-all duration-700 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'}`}>
+            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-[#dcfce7] opacity-60 pointer-events-none transition-opacity duration-500 group-hover:opacity-100"></div>
                 
                 <h3 className="text-[20px] font-bold text-[#1a113d] text-center mb-8 relative z-10">
                   Real-time insights<br/>for your vehicles
@@ -114,10 +138,10 @@ const SectionFour = () => {
                         key={feature.id}
                         onClick={() => setActiveIndex(feature.id)}
                         className={`rounded-2xl p-5 flex flex-col items-center text-center gap-3 shadow-sm cursor-pointer transition-all duration-300
-                          ${isActive ? `${feature.activeBg} border ${feature.activeBorder} scale-105 z-10` : 'bg-[#f3f4f6] border border-transparent hover:shadow-md'}
+                          ${isActive ? `${feature.activeBg} border ${feature.activeBorder} scale-105 z-10 shadow-md` : 'bg-[#f3f4f6] border border-transparent hover:shadow-md hover:-translate-y-1'}
                         `}
                       >
-                        <Icon className={`w-7 h-7 ${isActive ? 'text-gray-900' : 'text-gray-700'}`} strokeWidth={1.5} />
+                        <Icon className={`w-7 h-7 transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-700'}`} strokeWidth={1.5} />
                         <p className="text-[13px] leading-snug font-medium text-gray-600">{feature.title}</p>
                       </div>
                     );
@@ -125,17 +149,16 @@ const SectionFour = () => {
                 </div>
 
                 {/* Decorative Car Image */}
-                <div className="absolute bottom-2 right-2 w-[160px] h-[100px] z-20 pointer-events-none">
+                <div className="absolute bottom-2 right-2 w-[160px] h-[100px] z-20 pointer-events-none hover:scale-105 transition-transform duration-500">
                     <img src={Car} alt="Car" className="w-full h-full object-contain drop-shadow-xl" />
                 </div>
             </div>
           </div>
 
-
-          {/* CENTER: Exact Mobile Frame Match */}
-          <div className="order-1 lg:order-2 z-20 flex-shrink-0 -mt-10 lg:mt-0 relative drop-shadow-2xl">
+          {/* CENTER: Exact Mobile Frame Match (Scales & slides up) */}
+          <div className={`order-1 lg:order-2 z-20 flex-shrink-0 -mt-10 lg:mt-0 relative drop-shadow-2xl transition-all duration-1000 delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-95'}`}>
             {/* Outer Phone Bezel */}
-            <div className="relative w-[300px]  md:w-[400px] lg:w-[400px] h-[440px] md:h-[600px] lg:h-[580px] bg-[#1a113d] rounded-[52px] border-[12px] border-[#1a113d] shadow-2xl overflow-hidden mx-auto">
+            <div className="relative w-[300px]  md:w-[400px] lg:w-[400px] h-[440px] md:h-[600px] lg:h-[580px] bg-[#1a113d] rounded-[52px] border-[12px] border-[#1a113d] shadow-2xl overflow-hidden mx-auto hover:-translate-y-2 transition-transform duration-500">
               
               {/* Inner Phone Screen */}
               <div className="relative w-full h-full bg-slate-900 rounded-[40px] overflow-hidden">
@@ -145,12 +168,6 @@ const SectionFour = () => {
 
                 {/* iOS Status Bar Overlay */}
                 <div className="absolute top-0 w-full h-[40px] flex justify-between items-start px-7 pt-3.5 z-40 pointer-events-none mix-blend-difference text-white">
-                   {/* <span className="text-[12px] font-semibold tracking-wider font-sans leading-none">23:10</span>
-                   <div className="flex gap-1.5 items-center leading-none">
-                      <Signal className="w-3.5 h-3.5" strokeWidth={3} />
-                      <Wifi className="w-3.5 h-3.5" strokeWidth={3} />
-                      <BatteryFull className="w-4 h-4" strokeWidth={2} />
-                   </div> */}
                 </div>
                 
                 {/* Image Slides */}
@@ -169,11 +186,10 @@ const SectionFour = () => {
             </div>
           </div>
 
-
-          {/* RIGHT: Health Grid */}
-          <div className="w-full lg:w-[340px] xl:w-[380px] order-3 relative mt-8 lg:mt-0 z-10">
-             <div className="bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-bl from-white via-white to-[#fce7f3] opacity-60 pointer-events-none"></div>
+          {/* RIGHT: Health Grid (Slides in from Right) */}
+          <div className={`w-full lg:w-[340px] xl:w-[380px] order-3 relative mt-8 lg:mt-0 z-10 transition-all duration-700 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'}`}>
+             <div className="bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-bl from-white via-white to-[#fce7f3] opacity-60 pointer-events-none transition-opacity duration-500 group-hover:opacity-100"></div>
 
                 <h3 className="text-[20px] font-bold text-[#1a113d] text-center mb-8 relative z-10">
                   Stay prepared for<br/>health emergencies
@@ -191,10 +207,10 @@ const SectionFour = () => {
                         key={feature.id}
                         onClick={() => setActiveIndex(feature.id)}
                         className={`${gridClass} rounded-2xl p-5 flex flex-col items-center text-center gap-3 shadow-sm cursor-pointer transition-all duration-300
-                          ${isActive ? `${feature.activeBg} border ${feature.activeBorder} scale-105 z-10` : 'bg-[#f3f4f6] border border-transparent hover:shadow-md'}
+                          ${isActive ? `${feature.activeBg} border ${feature.activeBorder} scale-105 z-10 shadow-md` : 'bg-[#f3f4f6] border border-transparent hover:shadow-md hover:-translate-y-1'}
                         `}
                       >
-                        <Icon className={`w-7 h-7 ${isActive ? 'text-gray-900' : 'text-gray-700'}`} strokeWidth={1.5} />
+                        <Icon className={`w-7 h-7 transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-700'}`} strokeWidth={1.5} />
                         <p className="text-[13px] leading-snug font-medium text-gray-600">{feature.title}</p>
                       </div>
                     );
@@ -202,7 +218,7 @@ const SectionFour = () => {
                 </div>
 
                 {/* Decorative Ambulance Image */}
-                <div className="absolute bottom-4 left-2 w-[160px] h-[100px] z-20 pointer-events-none">
+                <div className="absolute bottom-4 left-2 w-[160px] h-[100px] z-20 pointer-events-none hover:scale-105 transition-transform duration-500">
                     <img src={Ambulance} alt="Ambulance" className="w-full h-full object-contain drop-shadow-xl" />
                 </div>
             </div>

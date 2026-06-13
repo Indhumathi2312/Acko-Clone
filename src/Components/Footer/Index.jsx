@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { FaInstagram, FaLinkedinIn, FaFacebookF, FaApple, FaGooglePlay } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6'; // FontAwesome 6 has the new X logo
+import { FaInstagram, FaLinkedinIn, FaFacebookF } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6'; 
 
 // Import the white version of the logo for the dark background
 import LogoWhite from '../../assets/logo-white.svg'; 
+
+// --- IMPORT YOUR SVG BADGES HERE ---
+// Ensure these paths match your folder structure exactly
+import AppleBadge from '../../assets/pci.svg'; 
+import GoogleBadge from '../../assets/tower.svg';
 
 // --- DATA CONSTANTS ---
 const topLinks = [
@@ -103,7 +108,7 @@ const Accordion = ({ title, columns }) => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#111111] font-sans pt-16 pb-12 w-full flex justify-center">
+    <footer className="bg-[#111111] font-jakarta pt-16 pb-12 w-full flex justify-center">
       <div className="w-full max-w-[1240px] px-6">
         
         {/* Top Section - Static Columns */}
@@ -124,8 +129,6 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           
           <div className="flex flex-col gap-4 max-w-xl">
-            
-            {/* LOGO SECTION */}
             <div className="flex items-center mb-2">
                <img src={LogoWhite} alt="ACKO Logo" className="h-7 lg:h-8 w-auto" />
             </div>
@@ -164,13 +167,13 @@ const Footer = () => {
               </a>
             </div>
 
-            {/* App Store / Play Store Badges */}
+            {/* App Store / Play Store SVGs */}
             <div className="flex gap-3">
-               <a href="#" className="w-10 h-10 bg-[#222] rounded-md border border-[#333] flex items-center justify-center text-white hover:bg-[#333] transition-colors" aria-label="App Store">
-                 <FaApple className="w-5 h-5" />
+               <a href="#" aria-label="App Store">
+                 <img src={AppleBadge} alt="Download on App Store" className="h-10 w-auto hover:opacity-90 transition-opacity" />
                </a>
-               <a href="#" className="w-10 h-10 bg-[#222] rounded-md border border-[#333] flex items-center justify-center text-white hover:bg-[#333] transition-colors" aria-label="Google Play">
-                 <FaGooglePlay className="w-4 h-4" />
+               <a href="#" aria-label="Google Play">
+                 <img src={GoogleBadge} alt="Get it on Google Play" className="h-10 w-auto hover:opacity-90 transition-opacity" />
                </a>
             </div>
           </div>

@@ -1,3 +1,28 @@
+/* --- src/index.css --- */
 
-
+/* 1. Imports MUST come first, at the absolute top of the file */
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import './EuclidFonts.css';
+
+/* 2. Define your font theme variables */
+@theme {
+  --font-sora: "Sora", sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-euclid: "Euclid Circular A", sans-serif;
+}
+
+/* 3. Apply global styles */
+@layer base {
+  body {
+    font-family: var(--font-jakarta);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sora);
+    font-weight: 700; 
+  }
+}
+
